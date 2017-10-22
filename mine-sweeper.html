@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<link href="img/mine.ico" rel="shortcut icon">
+		<title>扫雷</title>
+		<link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+		<link rel="stylesheet" type="text/css" href="css/mine-sweeper.css"/>
+	</head>
+	<body>
+		<div  id="app">
+			<div v-if="showModal" class="modal-backdrop fade in" @click="showModal = false"></div>
+			<div id="menu" class="form-inline text-center">
+				<div class="form-group">
+					<img src="img/menu.png"/>
+				</div>
+				<div class="form-group">
+					<label class="sr-only"></label>
+					<select class="form-control input-lg form-inline menu-level" id="level_sl">
+						<option value="1">初级(10*10)</option>
+						<option value="2">中级(16*16)</option>
+						<option value="3">大师(30*16)</option>
+					</select>
+				</div>
+				<div class="form-group" >
+					<button class="btn btn-default btn-lg" @click="beginGame">开始 </button>
+				</div>
+				<div class="form-group menu-clock">
+					<img src="img/clock.png">
+					<time>{{time}}</time>
+				</div>
+				<div class="form-group menu-mine">
+					<img src="img/mine_big.png">
+					<span>{{flagCnt}}</span>
+				</div>
+			</div>
+			<div class="separate"></div>
+			<div id="mine-table" class="text-center">
+				<ul class="list-unstyled list-inline mine-tr" v-for="(rownum, index) in level.rowCnt">
+					<li :class="getClass(item)" v-for="item in getRowData(index)" @mousedown="clickItemEvent($event, item)">
+					</li>
+				</ul>
+			</div>
+			
+			<div class="game-modal fade"  :class="{'in':this.showModal}" v-show="showModal"
+				tabindex="-1" role="dialog" 
+				aria-labelledby="myModalLabel" aria-hidden="true">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" aria-hidden="true" @click="showModal = false">
+								&times;
+							</button>
+							<h2 class="modal-title" id="myModalLabel">
+								{{islost? '游戏失败':'游戏胜利'}}
+							</h2> 
+						</div>
+						<div class="modal-body">
+							<div class="alert alert-danger" v-show="islost" role="alert">
+								<h4>游戏失败,请再接再厉!</h4>
+							</div>
+							<div class="alert alert-success" v-show="!islost" role="alert">
+								游戏胜利,您本次的成绩是: <h2>{{time}}<small>&nbsp;s</small></h2>
+							</div>
+							<h3>历史最佳:</h3>
+							<div class="table-responsive">
+								<table class="table table-striped">
+									<thead>
+										<tr>
+											<th>级别</th>
+											<th>耗时</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr v-for="(bestItem, index) in level_type" v-if="index != 0">
+											<td class="warning">{{bestItem.title}}</td>	
+											<td>{{bestItem.bestTime}}</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-default" @click="showModal = false">
+								关闭
+							</button>
+							<button type="button" class="btn btn-primary" @click="beginGame">
+								重新开始
+							</button>
+						</div>
+					</div>
+				</div>
+			</div>
+			
+		</div>
+    	<script src="js/vue.js"></script>
+		<script type="text/javascript" src="js/mine-sweeper.js" ></script>
+	</body>
+</html>
