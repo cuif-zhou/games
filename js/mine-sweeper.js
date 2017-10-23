@@ -21,11 +21,7 @@
 		mineTableArray = new Array();
 		var mineArrayLenght = level.colCnt * level.rowCnt;
 		for(var i = 0; i < mineArrayLenght; i++) { //生成雷阵
-			if(i < level.mineCnt) {
-				mineTableArray[i] = new mineTableItem(true);
-			} else {
-				mineTableArray[i] = new mineTableItem(false);
-			}
+			mineTableArray[i] = new mineTableItem(i < level.mineCnt);
 		}
 
 		for(var i = 0; i < mineArrayLenght; i++) { //打乱
@@ -53,7 +49,7 @@
 		var num = 0;
 		var indexArray = computeAroundIndex(index);
 		for(var i = 0; i < indexArray.length; i++){
-			if(mineTableIndexIsmine(indexArray[i])){
+			if(mineTableArray[indexArray[i]].isMine){
 				num ++;
 			}
 		}
@@ -79,14 +75,6 @@
 		a;
 	}
 
-	/**
-	 * 判断某点是不是雷
-	 * @param {Object} index
-	 */
-	function mineTableIndexIsmine(index) {
-		return mineTableArray[index] && mineTableArray[index].isMine;
-	}
-	
 	function exploreItem(item, mineArray){
 		var tempSetMore = new Set();
 		var tempSetLess = new Set();
