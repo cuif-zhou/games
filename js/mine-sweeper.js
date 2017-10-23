@@ -211,6 +211,7 @@
 				this.showModal = false;
 				this.time = 0;
 				this.flagCnt = this.level.mineCnt;
+				endTiming();				
 			},
 			getRowData: function(rownum) {
 				var rowArray = [];
